@@ -21,6 +21,7 @@ function M.setup()
 	end
 
 	Treesitter.ensure_parser("python")
+	require("python.folds").setup()
 
 	Mason.ensure_package({ "basedpyright" }, function()
 		Lsp.register("basedpyright", {
