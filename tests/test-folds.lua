@@ -90,5 +90,26 @@ check("method folds from the def line", {
 	"        return 1",
 }, { ">1", ">2", "2", "2", "1", ">2", "2" })
 
+io.write("\n== if / elif / else ==\n")
+check("each branch folds on its own, not the whole statement", {
+	"age = 20",
+	"",
+	"if age < 18:", -- 3: fold 3-4
+	'    print("minor")',
+	"elif age < 60:", -- 5: fold 5-6
+	'    print("adult")',
+	"else:", -- 7: fold 7-8
+	'    print("senior")',
+}, { "0", "0", ">1", "1", ">1", "1", ">1", "1" })
+
+check("multi-line condition folds from the `:` line; nested if keeps its own fold", {
+	"if (a and", -- 1: condition (parenthesized) fold 1-2
+	"        b):", -- 2: body fold 2-6
+	"    if c:", -- 3: fold 3-4
+	"        x = 1",
+	"    else:", -- 5: fold 5-6
+	"        x = 2",
+}, { ">1", ">1", ">2", "2", ">2", "2" })
+
 io.write(string.format("\n%d passed, %d failed\n", passed, failed))
 os.exit(failed > 0 and 1 or 0)

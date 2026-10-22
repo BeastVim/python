@@ -6,11 +6,14 @@
 ; pattern, which folds from the closing paren of the parameters (the `):` line)
 ; to the end of the body. Two nodes under one @fold capture are merged by
 ; Neovim into a single range (first start -> last end).
+;
+; Same idea for if/elif/else: (if_statement) is replaced by one fold per branch
+; (from its `:` to the end of its block) so a branch folds on its own instead of
+; the whole statement.
 [
   (class_definition)
   (while_statement)
   (for_statement)
-  (if_statement)
   (with_statement)
   (try_statement)
   (match_statement)
@@ -36,4 +39,16 @@
 
 (function_definition
   parameters: (parameters ")" @fold)
+  body: (block) @fold)
+
+(if_statement
+  ":" @fold
+  consequence: (block) @fold)
+
+(elif_clause
+  ":" @fold
+  consequence: (block) @fold)
+
+(else_clause
+  ":" @fold
   body: (block) @fold)
