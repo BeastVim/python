@@ -88,7 +88,7 @@ function M.setup()
             M.organize_imports(vim.api.nvim_get_current_buf())
 					end,
 					desc = "Organize Imports",
-					cond = "textDocument/codeAction",
+					method = "textDocument/codeAction",
 				},
 			},
 		})
